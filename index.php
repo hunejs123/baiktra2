@@ -39,23 +39,16 @@
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <?php
             session_start();
-
-            // Lấy thông tin kết nối từ session
             if (isset($_SESSION['server']) && isset($_SESSION['database']) && isset($_SESSION['username']) && isset($_SESSION['password'])) {
                 $server = $_SESSION['server'];
                 $database = $_SESSION['database'];
                 $username = $_SESSION['username'];
                 $password = $_SESSION['password'];
-
-                // Tạo kết nối tới database
                 $conn = new mysqli($server, $username, $password, $database,3307);
 
-                // Kiểm tra kết nối
                 if ($conn->connect_error) {
                     die('Kết nối thất bại: ' . $conn->connect_error);
                 }
-
-                // Truy vấn lấy danh sách khóa học từ bảng Course
                 $sql = "SELECT * FROM  Course";
                 $result = $conn->query($sql);
 
@@ -97,33 +90,23 @@
         </form>
 
         <?php
-        // Xử lý ghi file
         if (isset($_POST['submit'])) {
             $filename = $_POST['filename'] . '.txt'; 
-
-            // Lấy thông tin kết nối từ session
             if (isset($_SESSION['server']) && isset($_SESSION['database']) && isset($_SESSION['username']) && isset($_SESSION['password'])) {
                 $server = $_SESSION['server'];
                 $database = $_SESSION['database'];
                 $username = $_SESSION['username'];
                 $password = $_SESSION['password'];
-
-                // Tạo kết nối tới database
                 $conn = new mysqli($server, $username, $password, $database,3307);
-
-                // Kiểm tra kết nối
                 if ($conn->connect_error) {
                     die('Kết nối thất bại: ' . $conn->connect_error);
                 }
-
-                // Truy vấn danh sách các khóa học để ghi vào file
                 $sql = "SELECT * FROM course";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     $content = "Danh sách các khóa học:\n";
 
-                    // Duyệt qua các bản ghi và thêm vào nội dung file
                     while ($row = $result->fetch_assoc()) {
                         $content .= "ID: " . $row['Id'] . "\n";
                         $content .= "Title: " . $row['Title'] . "\n";
@@ -131,7 +114,6 @@
                         $content .= "Image URL: " . $row['ImageUrl'] . "\n\n";
                     }
 
-                    // Ghi nội dung vào file
                     $file = fopen($filename, "w"); 
                     if ($file) {
                         fwrite($file, $content);
